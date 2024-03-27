@@ -10,10 +10,7 @@ import {useAuth0, Auth0Provider} from 'react-native-auth0';
 import ButtonContainer from './components/ButtonContainer';
 import Button from './components/Button';
 import {REACT_APP_AUTH_DOMAIN, REACT_APP_AUTH_CLIENT_ID} from '@env';
-
-import {
-  Text
-} from 'react-native';
+import { Form, FormLabel, FormValue, Page } from './components';
 
 
 const LoginButton = () => {
@@ -48,23 +45,42 @@ const Profile = () => {
   const {user} = useAuth0();
   console.log(user)
   return (
-      <>
-          {user && <Text>Logged in as {user.name}</Text>}
-          {!user && <Text>Not logged in</Text>}
-      </>
+    <Form>
+      {user &&
+        <>
+          <FormLabel>Logged In</FormLabel>
+          <FormValue>{user.name}</FormValue>
+        </>
+      }
+      {!user && 
+        <>
+          <FormLabel>Not Logged In</FormLabel>
+        </>}
+    </Form>
+  )
+}
+
+const ButtonGroup = () => {
+  const {user} = useAuth0();
+  console.log(user)
+  return (
+    <ButtonContainer>
+      {!user && <LoginButton />}
+      {user && <LogoutButton />}
+    </ButtonContainer>
   )
 }
 
 function App(): React.JSX.Element {
   const {user} = useAuth0()
+  console.log("here", user)
   return (
     <Auth0Provider domain={REACT_APP_AUTH_DOMAIN} clientId={REACT_APP_AUTH_CLIENT_ID}>
       <>
-        <Profile />
-        <ButtonContainer>
-          <LoginButton />
-          <LogoutButton />
-        </ButtonContainer>
+        <Page>
+          <Profile />
+          <ButtonGroup />
+        </Page>
       </>
     </Auth0Provider>
   );
