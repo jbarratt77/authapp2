@@ -4,14 +4,19 @@ import LoggedIn from './LoggedIn';
 import LoggedOut from './LoggedOut';
 
 function Main(): React.JSX.Element {
-  const {user, hasValidCredentials} = useAuth0();
+  const {user, hasValidCredentials, getCredentials} = useAuth0();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const check = async () => {
       const isLoggedIn = await hasValidCredentials();
+      setIsLoggedIn(isLoggedIn);
       return isLoggedIn;
     };
-    check().then(setIsLoggedIn).catch(console.error);
+    const refresh = async () => {
+      const credentials = await getCredentials();
+      return credentials;
+    }
+    check().then(refresh).catch(console.error);
   }, [user]);
   return isLoggedIn ? <LoggedIn /> : <LoggedOut />;
 }
