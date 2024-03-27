@@ -72,8 +72,6 @@ const ButtonGroup = () => {
 }
 
 function App(): React.JSX.Element {
-  const {user} = useAuth0()
-  console.log("here", user)
   return (
     <Auth0Provider domain={REACT_APP_AUTH_DOMAIN} clientId={REACT_APP_AUTH_CLIENT_ID}>
       <>
