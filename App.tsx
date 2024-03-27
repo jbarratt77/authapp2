@@ -1,16 +1,24 @@
-import React from 'react';
-import {Auth0Provider} from 'react-native-auth0';
-import {REACT_APP_AUTH_DOMAIN, REACT_APP_AUTH_CLIENT_ID} from '@env';
-import Main from './components/section/Main';
+import React, {useEffect, useState} from 'react';
+import {useAuth0} from 'react-native-auth0';
+import LoggedIn from './components/section/LoggedIn';
+import LoggedOut from './components/section/LoggedOut';
 
 function App(): React.JSX.Element {
-  return (
-    <Auth0Provider
-      domain={REACT_APP_AUTH_DOMAIN}
-      clientId={REACT_APP_AUTH_CLIENT_ID}>
-      <Main />
-    </Auth0Provider>
-  );
+  const {user, hasValidCredentials, getCredentials} = useAuth0();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const check = async () => {
+      const isLoggedIn = await hasValidCredentials();
+      setIsLoggedIn(isLoggedIn);
+      return isLoggedIn;
+    };
+    const refresh = async () => {
+      const credentials = await getCredentials();
+      return credentials;
+    };
+    check().then(refresh).catch(console.error);
+  }, [user]);
+  return isLoggedIn ? <LoggedIn /> : <LoggedOut />;
 }
 
 export default App;
