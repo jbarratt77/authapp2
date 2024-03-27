@@ -18,11 +18,4 @@ buildscript {
     }
 }
 
-android {
-    defaultConfig {
-        // Add the next line
-        manifestPlaceholders = [auth0Domain: "authapp.uk.auth0.com", auth0Scheme: "${applicationId}.auth0"]
-    }
-}
-
 apply plugin: "com.facebook.react.rootproject"
